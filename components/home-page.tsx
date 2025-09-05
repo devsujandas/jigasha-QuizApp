@@ -57,7 +57,7 @@ const HomePage = ({ onStartQuiz, onViewStats, onOpenSettings }: HomePageProps) =
   <div className="text-center space-y-8 animate-fade-in">
 
     {/* Logo + Brand */}
-    <div className="flex items-center justify-center gap-3">
+    <div className="flex items-center justify-center ">
   <Image
     src="/images/brain-logo.png"
     alt="JIGASHA Logo"
