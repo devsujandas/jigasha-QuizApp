@@ -52,33 +52,46 @@ const HomePage = ({ onStartQuiz, onViewStats, onOpenSettings }: HomePageProps) =
 
   return (
     <div className="min-h-screen bg-background pb-20">
-      {/* Hero Section */}
-      <div className="px-6 pt-12 pb-8">
-        <div className="text-center space-y-4 animate-fade-in">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-full text-sm font-medium">
-            <Image
-              src="/images/brain-logo.png"
-              alt="JIGASHA Brain Logo"
-              width={16}
-              height={16}
-              className="leading-8 w-8 h-8"
-            />
-            JIGASHA
-          </div>
-          <h1 className="text-4xl font-bold text-foreground">Test Your Knowledge</h1>
-          <p className="text-lg text-muted-foreground max-w-md mx-auto">
-            Challenge yourself with trivia questions across multiple categories and track your progress
-          </p>
-          <Button
-            onClick={onStartQuiz}
-            size="lg"
-            className="mt-6 px-8 py-3 text-lg font-semibold transition-smooth hover:scale-105"
-          >
-            <Play className="h-5 w-5 mr-2" />
-            Start Quiz
-          </Button>
-        </div>
-      </div>
+{/* Hero Section */}
+<div className="relative px-6 pt-20 pb-16">
+  <div className="text-center space-y-8 animate-fade-in">
+
+    {/* Logo + Brand */}
+    <div className="flex items-center justify-center gap-3">
+      <Image
+        src="/images/brain-logo.png"
+        alt="JIGASHA Logo"
+        width={48}
+        height={48}
+        className="w-12 h-12 drop-shadow-lg"
+      />
+      <span className="text-3xl sm:text-4xl font-extrabold tracking-wide bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
+        JIGASHA
+      </span>
+    </div>
+
+    {/* Heading */}
+    <h1 className="text-3xl sm:text-5xl md:text-6xl font-extrabold text-foreground leading-tight">
+      Test Your Knowledge
+    </h1>
+
+    {/* Subtitle */}
+    <p className="text-base sm:text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+      Challenge yourself with engaging questions and keep track of your progress along the way.
+    </p>
+
+    {/* CTA Button */}
+    <Button
+      onClick={onStartQuiz}
+      size="lg"
+      className="mt-8 px-10 py-4 text-lg font-semibold rounded-xl shadow-md hover:shadow-xl transition-transform duration-300 hover:scale-110"
+    >
+      <Play className="h-6 w-6 mr-2" />
+      Start Quiz
+    </Button>
+  </div>
+</div>
+
 
       {/* Quick Stats */}
       {stats.gamesPlayed > 0 && (
