@@ -58,17 +58,18 @@ const HomePage = ({ onStartQuiz, onViewStats, onOpenSettings }: HomePageProps) =
 
     {/* Logo + Brand */}
     <div className="flex items-center justify-center gap-3">
-      <Image
-        src="/images/brain-logo.png"
-        alt="JIGASHA Logo"
-        width={48}
-        height={48}
-        className="w-12 h-12 drop-shadow-lg"
-      />
-      <span className="text-3xl sm:text-4xl font-extrabold tracking-wide bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
-        JIGASHA
-      </span>
-    </div>
+  <Image
+    src="/images/brain-logo.png"
+    alt="JIGASHA Logo"
+    width={48}
+    height={48}
+    className="w-12 h-12 drop-shadow-lg"
+  />
+  <span className="text-3xl sm:text-4xl font-extrabold tracking-wide bg-gradient-to-r from-cyan-400 via-indigo-500 to-purple-600 bg-clip-text text-transparent">
+    JIGASHA
+  </span>
+</div>
+
 
     {/* Heading */}
     <h1 className="text-3xl sm:text-5xl md:text-6xl font-extrabold text-foreground leading-tight">
