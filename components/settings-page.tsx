@@ -409,7 +409,7 @@ export function SettingsPage({ onBack }: SettingsPageProps) {
     {/* Left Side Info */}
     <div className="flex flex-col sm:flex-row items-center gap-2 text-center sm:gap-6">
       <p className="text-xs text-muted-foreground">
-        © 2025 Sujan Das. All rights reserved.
+        © 2025 JIGASHA. All rights reserved.
       </p>
       <p className="text-xs text-muted-foreground">Version 2.6.1</p>
     </div>
