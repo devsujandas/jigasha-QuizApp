@@ -54,43 +54,29 @@ const HomePage = ({ onStartQuiz, onViewStats, onOpenSettings }: HomePageProps) =
     <div className="min-h-screen bg-background pb-20">
       {/* Hero Section */}
       <div className="px-6 pt-12 pb-8">
-        <div className="text-center space-y-6 animate-fade-in">
-          <div className="relative">
-            <div className="absolute inset-0 bg-primary/5 rounded-full blur-3xl scale-150"></div>
-            <div className="relative inline-flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-primary to-primary/90 text-primary-foreground rounded-full text-sm font-medium shadow-lg border border-primary/20">
-              <div className="flex items-center justify-center w-8 h-8 bg-white/20 rounded-full">
-                <Image
-                  src="/images/brain-logo.png"
-                  alt="JIGASHA Brain Logo"
-                  width={20}
-                  height={20}
-                  className="w-5 h-5"
-                />
-              </div>
-              <span className="font-semibold tracking-wide">JIGASHA</span>
-            </div>
+        <div className="text-center space-y-4 animate-fade-in">
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-full text-sm font-medium">
+            <Image
+              src="/images/brain-logo.png"
+              alt="JIGASHA Brain Logo"
+              width={16}
+              height={16}
+              className="leading-8 w-8 h-8"
+            />
+            JIGASHA
           </div>
-
-          <div className="space-y-4">
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-foreground leading-tight whitespace-nowrap">
-              Test Your <span className="text-primary font-extrabold">Knowledge</span>
-            </h1>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-              Challenge yourself with trivia questions across multiple categories and track your progress as you become
-              a quiz master
-            </p>
-          </div>
-
-          <div className="pt-4">
-            <Button
-              onClick={onStartQuiz}
-              size="lg"
-              className="px-10 py-4 text-lg font-semibold transition-all duration-300 hover:scale-105 hover:shadow-xl shadow-lg"
-            >
-              <Play className="h-6 w-6 mr-3" />
-              Start Quiz Now
-            </Button>
-          </div>
+          <h1 className="text-4xl font-bold text-foreground">Test Your Knowledge</h1>
+          <p className="text-lg text-muted-foreground max-w-md mx-auto">
+            Challenge yourself with trivia questions across multiple categories and track your progress
+          </p>
+          <Button
+            onClick={onStartQuiz}
+            size="lg"
+            className="mt-6 px-8 py-3 text-lg font-semibold transition-smooth hover:scale-105"
+          >
+            <Play className="h-5 w-5 mr-2" />
+            Start Quiz
+          </Button>
         </div>
       </div>
 
