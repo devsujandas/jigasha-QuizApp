@@ -1,6 +1,6 @@
 {
-  "name": "my-v0-project",
-  "version": "0.1.0",
+  "name": "jigasha",
+  "version": "02.06.01",
   "private": true,
   "scripts": {
     "build": "next build",

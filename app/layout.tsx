@@ -39,6 +39,28 @@ export const metadata: Metadata = {
     ],
   },
   manifest: "/site.webmanifest",
+  openGraph: {
+    title: "JIGASHA - Test Your Knowledge",
+    description: "Challenge yourself with quizzes across multiple categories and difficulty levels.",
+    url: "https://jigasha.vercel.app",
+    siteName: "JIGASHA",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "JIGASHA - Quiz App",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "JIGASHA - Test Your Knowledge",
+    description: "Challenge yourself with fun quizzes and earn achievements.",
+    images: ["/og-image.png"],
+  },
 }
 
 export default function RootLayout({
@@ -48,9 +70,26 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`font-sans ${GeistSans.variable} ${GeistMono.variable}`}>
-        <Suspense fallback={null}>
-          <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+      <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="shortcut icon" href="/favicon.ico" />
+      </head>
+      <body
+        className={`font-sans bg-background text-foreground ${GeistSans.variable} ${GeistMono.variable}`}
+      >
+        <Suspense
+          fallback={
+            <div className="flex items-center justify-center h-screen">
+              <p className="text-lg font-medium">Loading...</p>
+            </div>
+          }
+        >
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
             {children}
           </ThemeProvider>
         </Suspense>
