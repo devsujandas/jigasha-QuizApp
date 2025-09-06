@@ -27,9 +27,12 @@ const HomePage = ({ onStartQuiz, onViewStats, onOpenSettings }: HomePageProps) =
       const newStats = getQuizStats()
       const history = getQuizHistory()
 
-      // Calculate accuracy from history
+      // ✅ Accuracy should use rawScore (not penalized score)
       const totalQ = history.reduce((sum, game) => sum + game.totalQuestions, 0)
-      const correct = history.reduce((sum, game) => sum + game.score, 0)
+      const correct = history.reduce(
+        (sum, game) => sum + (game.rawScore ?? game.score),
+        0
+      )
       const acc = totalQ > 0 ? Math.round((correct / totalQ) * 100) : 0
 
       setStats(newStats)

@@ -2,7 +2,8 @@ interface QuizResult {
   id: string
   category: string
   difficulty: string
-  score: number
+  rawScore: number        // ✅ new field to keep original correct answers
+  score: number           // ✅ penalized score
   totalQuestions: number
   percentage: number
   timestamp: number
@@ -93,7 +94,6 @@ class QuizStorage {
 
       const parsed = JSON.parse(stored) as QuizData
 
-      // Validate data structure
       if (!this.isValidData(parsed)) {
         console.warn("Invalid data structure, using defaults")
         return { ...defaultData }
@@ -121,7 +121,6 @@ class QuizStorage {
   private migrateIfNeeded(): void {
     if (!this.isClient) return
 
-    // Migrate from old localStorage format
     const oldTotalScore = localStorage.getItem("quiz-total-score")
     const oldGamesPlayed = localStorage.getItem("quiz-games-played")
     const oldSoundEnabled = localStorage.getItem("quiz-sound-enabled")
@@ -130,7 +129,6 @@ class QuizStorage {
     const oldFontSize = localStorage.getItem("quiz-font-size")
 
     if (oldTotalScore || oldGamesPlayed) {
-      // Migrate old data
       this.data.stats.totalScore = Number.parseInt(oldTotalScore || "0")
       this.data.stats.gamesPlayed = Number.parseInt(oldGamesPlayed || "0")
       this.data.stats.averageScore =
@@ -143,7 +141,6 @@ class QuizStorage {
       if (oldShuffleQuestions) this.data.settings.shuffleQuestions = oldShuffleQuestions !== "false"
       if (oldFontSize) this.data.settings.fontSize = oldFontSize
 
-      // Clean up old keys
       const oldKeys = [
         "quiz-total-score",
         "quiz-games-played",
@@ -173,7 +170,6 @@ class QuizStorage {
     }
   }
 
-  // Settings methods
   getSettings(): UserSettings {
     return { ...this.data.settings }
   }
@@ -183,16 +179,22 @@ class QuizStorage {
     this.saveData()
   }
 
-  // Stats methods
   getStats(): UserStats {
     return { ...this.data.stats }
   }
 
-  // Quiz result methods
-  addQuizResult(result: Omit<QuizResult, "id" | "timestamp" | "percentage">): void {
-    const percentage = Math.round((result.score / result.totalQuestions) * 100)
+  // ✅ Negative marking applied here
+  addQuizResult(result: Omit<QuizResult, "id" | "timestamp" | "percentage" | "rawScore">): void {
+    const wrong = result.totalQuestions - result.score
+    const penalty = Math.floor(wrong / 3)
+    const effectiveScore = Math.max(0, result.score - penalty)
+
+    const percentage = Math.round((effectiveScore / result.totalQuestions) * 100)
+
     const quizResult: QuizResult = {
       ...result,
+      rawScore: result.score, // keep original correct answers
+      score: effectiveScore,  // store penalized score
       id: `quiz-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
       timestamp: Date.now(),
       percentage,
@@ -200,7 +202,6 @@ class QuizStorage {
 
     this.data.history.unshift(quizResult)
 
-    // Keep only last 100 results
     if (this.data.history.length > 100) {
       this.data.history = this.data.history.slice(0, 100)
     }
@@ -216,19 +217,16 @@ class QuizStorage {
     stats.totalScore += result.score
     stats.gamesPlayed += 1
 
-    // ✅ FIXED: averageScore now calculated from all history percentages
     const totalPercentage = this.data.history.reduce((sum, r) => sum + r.percentage, 0)
     stats.averageScore = Math.round(totalPercentage / stats.gamesPlayed)
 
     stats.bestScore = Math.max(stats.bestScore, result.percentage)
     stats.totalTimeSpent += result.timeSpent
 
-    // Update category tracking
     if (!stats.categoriesPlayed.includes(result.category)) {
       stats.categoriesPlayed.push(result.category)
     }
 
-    // Update streak
     if (result.percentage >= 70) {
       stats.streakCurrent += 1
       stats.streakBest = Math.max(stats.streakBest, stats.streakCurrent)
@@ -242,60 +240,49 @@ class QuizStorage {
     const stats = this.data.stats
     const history = this.data.history
 
-    // First Strike - Complete your very first quiz
     if (stats.gamesPlayed === 1 && !achievements.includes("first-strike")) {
       achievements.push("first-strike")
     }
 
-    // Brain Spark - Score 100% in any quiz
     if (result.percentage === 100 && !achievements.includes("brain-spark")) {
       achievements.push("brain-spark")
     }
 
-    // Speed Demon - Finish a quiz in under 60 seconds
     if (result.timeSpent < 60 && !achievements.includes("speed-demon")) {
       achievements.push("speed-demon")
     }
 
-    // Hot Streak - Win 3 quizzes in a row
     if (stats.streakCurrent >= 3 && !achievements.includes("hot-streak")) {
       achievements.push("hot-streak")
     }
 
-    // Explorer - Play quizzes from 5 different categories
     if (stats.categoriesPlayed.length >= 5 && !achievements.includes("explorer")) {
       achievements.push("explorer")
     }
 
-    // Quiz Veteran - Attempt 25 quizzes in total
     if (stats.gamesPlayed >= 25 && !achievements.includes("quiz-veteran")) {
       achievements.push("quiz-veteran")
     }
 
-    // Perfectionist - Achieve a perfect score 3 times
     const perfectScores = history.filter((h) => h.percentage === 100).length
     if (perfectScores >= 3 && !achievements.includes("perfectionist")) {
       achievements.push("perfectionist")
     }
 
-    // Night Owl - Play a quiz between midnight and 3 AM
     const hour = new Date(result.timestamp).getHours()
     if (hour >= 0 && hour < 3 && !achievements.includes("night-owl")) {
       achievements.push("night-owl")
     }
 
-    // Grandmaster - Reach 500 total points
     if (stats.totalScore >= 500 && !achievements.includes("grandmaster")) {
       achievements.push("grandmaster")
     }
 
-    // Marathoner - Play quizzes 7 days in a row
     if (this.checkConsecutiveDays(7) && !achievements.includes("marathoner")) {
       achievements.push("marathoner")
     }
   }
 
-  // Helper method to check consecutive days
   private checkConsecutiveDays(targetDays: number): boolean {
     if (this.data.history.length < targetDays) return false
 
@@ -322,7 +309,6 @@ class QuizStorage {
     return this.data.history[0] || null
   }
 
-  // Data management methods
   exportData(): string {
     return JSON.stringify(this.data, null, 2)
   }
@@ -361,7 +347,6 @@ class QuizStorage {
     this.saveData()
   }
 
-  // Achievement helpers
   getAchievements(): string[] {
     return [...this.data.stats.achievements]
   }
@@ -383,7 +368,6 @@ class QuizStorage {
   }
 }
 
-// Singleton instance
 let storageInstance: QuizStorage | null = null
 
 export function getStorage(): QuizStorage {
@@ -393,7 +377,6 @@ export function getStorage(): QuizStorage {
   return storageInstance
 }
 
-// Convenience functions for backward compatibility
 export function getQuizSettings(): UserSettings {
   return getStorage().getSettings()
 }
@@ -406,7 +389,7 @@ export function getQuizStats(): UserStats {
   return getStorage().getStats()
 }
 
-export function addQuizResult(result: Omit<QuizResult, "id" | "timestamp" | "percentage">): void {
+export function addQuizResult(result: Omit<QuizResult, "id" | "timestamp" | "percentage" | "rawScore">): void {
   getStorage().addQuizResult(result)
 }
 

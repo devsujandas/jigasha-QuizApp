@@ -91,10 +91,19 @@ export function ResultsPage({ onBack }: ResultsPageProps) {
           <CardHeader className="text-center">
             <div className="text-4xl mb-2">{performance.icon}</div>
             <CardTitle className={cn("text-2xl", performance.color)}>{performance.message}</CardTitle>
-            <div className="text-3xl font-bold text-primary">
-              {lastResult.score}/{lastResult.totalQuestions}
+
+            {/* ✅ Raw Score */}
+            <div className="text-2xl font-bold text-foreground mt-2">
+              Correct Answers: {lastResult.rawScore}/{lastResult.totalQuestions}
             </div>
-            <div className="text-lg text-muted-foreground">{percentage}% Correct</div>
+
+            {/* ✅ Final Score */}
+            <div className="text-3xl font-bold text-primary mt-2">
+              Final Score: {lastResult.score}/{lastResult.totalQuestions}
+            </div>
+
+            <div className="text-lg text-muted-foreground">{percentage}% After Penalty</div>
+
             {/* ✅ Date + Time */}
             <div className="text-sm text-muted-foreground mt-2">
               {lastResult.difficulty} • {formattedDate} at {formattedTime}
@@ -135,8 +144,7 @@ export function ResultsPage({ onBack }: ResultsPageProps) {
             <div className="grid grid-cols-2 gap-4">
               <div className="text-center">
                 <div className="text-2xl font-bold text-primary">{stats.totalScore}</div>
-                {/* ✅ Label updated */}
-                <div className="text-sm text-muted-foreground">Total Correct Answers</div>
+                <div className="text-sm text-muted-foreground">Total Correct Answers (after penalty)</div>
               </div>
               <div className="text-center">
                 <div className="text-2xl font-bold text-secondary">{stats.gamesPlayed}</div>

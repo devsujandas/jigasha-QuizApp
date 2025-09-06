@@ -26,7 +26,11 @@ export function StatisticsPage({ onBack }: StatisticsPageProps) {
     if (history.length === 0) return { accuracy: 0, totalQuestions: 0, correctAnswers: 0 }
 
     const totalQuestions = history.reduce((sum, game) => sum + game.totalQuestions, 0)
-    const correctAnswers = history.reduce((sum, game) => sum + game.score, 0)
+    // ✅ use rawScore if available, fallback to score
+    const correctAnswers = history.reduce(
+      (sum, game) => sum + (game.rawScore ?? game.score),
+      0
+    )
     const accuracy = totalQuestions > 0 ? Math.round((correctAnswers / totalQuestions) * 100) : 0
 
     return { accuracy, totalQuestions, correctAnswers }
@@ -68,7 +72,6 @@ export function StatisticsPage({ onBack }: StatisticsPageProps) {
     return history.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0)).slice(0, 10)
   }
 
-  // ✅ Safe date formatter
   const formatDateTime = (timestamp?: number) => {
     if (!timestamp) return "Unknown Date"
     const date = new Date(timestamp)
@@ -136,7 +139,7 @@ export function StatisticsPage({ onBack }: StatisticsPageProps) {
             <Target className="h-5 w-5 text-primary" />
           </div>
           <div className="text-3xl font-bold text-foreground mb-1">{stats.totalScore}</div>
-          <div className="text-sm text-muted-foreground">1 point per correct answer</div>
+          <div className="text-sm text-muted-foreground">1 point per correct answer (after penalty)</div>
         </CardContent>
       </Card>
 
