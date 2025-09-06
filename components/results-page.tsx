@@ -88,27 +88,38 @@ export function ResultsPage({ onBack }: ResultsPageProps) {
       <div className="p-4 space-y-4">
         {/* Latest Quiz Results */}
         <Card className="animate-fade-in">
-          <CardHeader className="text-center">
-            <div className="text-4xl mb-2">{performance.icon}</div>
-            <CardTitle className={cn("text-2xl", performance.color)}>{performance.message}</CardTitle>
+          <CardHeader className="text-center space-y-2">
+            <div className="text-4xl">{performance.icon}</div>
+            <CardTitle className={cn("text-2xl font-semibold", performance.color)}>
+              {performance.message}
+            </CardTitle>
 
-            {/* ✅ Raw Score */}
-            <div className="text-2xl font-bold text-foreground mt-2">
-              Correct Answers: {lastResult.rawScore}/{lastResult.totalQuestions}
+            {/* ✅ Results summary in clean blocks */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-4">
+              <div className="bg-accent/50 rounded-lg p-3">
+                <div className="text-sm text-muted-foreground">Correct Answers</div>
+                <div className="text-xl font-bold text-foreground">
+                  {lastResult.rawScore}/{lastResult.totalQuestions}
+                </div>
+              </div>
+              <div className="bg-accent/50 rounded-lg p-3">
+                <div className="text-sm text-muted-foreground">Final Score</div>
+                <div className="text-xl font-bold text-primary">
+                  {lastResult.score}/{lastResult.totalQuestions}
+                </div>
+              </div>
+              <div className="bg-accent/50 rounded-lg p-3">
+                <div className="text-sm text-muted-foreground">After Penalty</div>
+                <div className="text-xl font-bold">{percentage}%</div>
+              </div>
             </div>
-
-            {/* ✅ Final Score */}
-            <div className="text-3xl font-bold text-primary mt-2">
-              Final Score: {lastResult.score}/{lastResult.totalQuestions}
-            </div>
-
-            <div className="text-lg text-muted-foreground">{percentage}% After Penalty</div>
 
             {/* ✅ Date + Time */}
-            <div className="text-sm text-muted-foreground mt-2">
+            <div className="text-sm text-muted-foreground mt-4">
               {lastResult.difficulty} • {formattedDate} at {formattedTime}
             </div>
           </CardHeader>
+
           <CardContent>
             <div className="flex justify-center gap-2 mb-4">
               <Badge variant="secondary" className="capitalize">
@@ -120,7 +131,7 @@ export function ResultsPage({ onBack }: ResultsPageProps) {
             </div>
 
             {/* Progress Bar */}
-            <div className="w-full bg-muted rounded-full h-3 mb-4">
+            <div className="w-full bg-muted rounded-full h-3">
               <div
                 className={cn(
                   "h-3 rounded-full transition-all duration-1000 ease-out",
@@ -141,18 +152,18 @@ export function ResultsPage({ onBack }: ResultsPageProps) {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="text-center">
-                <div className="text-2xl font-bold text-primary">{stats.totalScore}</div>
-                <div className="text-sm text-muted-foreground">Total Correct Answers (after penalty)</div>
+            <div className="grid grid-cols-3 gap-4 text-center">
+              <div className="p-3 rounded-lg bg-accent/40">
+                <div className="text-sm text-muted-foreground">Total Correct (after penalty)</div>
+                <div className="text-xl font-bold text-primary">{stats.totalScore}</div>
               </div>
-              <div className="text-center">
-                <div className="text-2xl font-bold text-secondary">{stats.gamesPlayed}</div>
+              <div className="p-3 rounded-lg bg-accent/40">
                 <div className="text-sm text-muted-foreground">Games Played</div>
+                <div className="text-xl font-bold">{stats.gamesPlayed}</div>
               </div>
-              <div className="text-center col-span-2">
-                <div className="text-2xl font-bold text-accent">{averageScore}%</div>
+              <div className="p-3 rounded-lg bg-accent/40">
                 <div className="text-sm text-muted-foreground">Average Score</div>
+                <div className="text-xl font-bold text-primary">{averageScore}%</div>
               </div>
             </div>
           </CardContent>

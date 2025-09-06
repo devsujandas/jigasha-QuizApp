@@ -101,7 +101,7 @@ const HomePage = ({ onStartQuiz, onViewStats, onOpenSettings }: HomePageProps) =
             Start Quiz
           </Button>
         </div>
-      </div>
+      </div>   
 
       {/* Quick Stats */}
       {isClient && stats.gamesPlayed > 0 && (
@@ -186,6 +186,55 @@ const HomePage = ({ onStartQuiz, onViewStats, onOpenSettings }: HomePageProps) =
           </Button>
         </div>
       </div>
+
+      {/* How to Play Section */}
+<div className="px-6 mb-12">
+  <h2 className="text-2xl font-bold mb-6 text-center bg-gradient-to-r from-purple-500 via-indigo-500 to-cyan-400 bg-clip-text text-transparent">
+    How to Play
+  </h2>
+  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 animate-stagger">
+    <Card className="transition-all duration-300 hover:shadow-lg hover:scale-105">
+      <CardContent className="p-6 text-center space-y-3">
+        <div className="w-12 h-12 mx-auto flex items-center justify-center rounded-full bg-green-100 dark:bg-green-900/30">
+          <Target className="h-6 w-6 text-green-600" />
+        </div>
+        <h3 className="font-semibold text-foreground">Earn Points</h3>
+        <p className="text-sm text-muted-foreground">Each correct answer gives <span className="font-bold text-green-600">+1 point</span>.</p>
+      </CardContent>
+    </Card>
+
+    <Card className="transition-all duration-300 hover:shadow-lg hover:scale-105">
+      <CardContent className="p-6 text-center space-y-3">
+        <div className="w-12 h-12 mx-auto flex items-center justify-center rounded-full bg-red-100 dark:bg-red-900/30">
+          <Trophy className="h-6 w-6 text-red-500" />
+        </div>
+        <h3 className="font-semibold text-foreground">Beware of Penalty</h3>
+        <p className="text-sm text-muted-foreground">Each wrong answer deducts <span className="font-bold text-red-500">−0.25 points</span>.</p>
+      </CardContent>
+    </Card>
+
+    <Card className="transition-all duration-300 hover:shadow-lg hover:scale-105">
+      <CardContent className="p-6 text-center space-y-3">
+        <div className="w-12 h-12 mx-auto flex items-center justify-center rounded-full bg-yellow-100 dark:bg-yellow-900/30">
+          <Clock className="h-6 w-6 text-yellow-500" />
+        </div>
+        <h3 className="font-semibold text-foreground">Time Matters</h3>
+        <p className="text-sm text-muted-foreground">Finish all questions within the timer to score better.</p>
+      </CardContent>
+    </Card>
+
+    <Card className="transition-all duration-300 hover:shadow-lg hover:scale-105">
+      <CardContent className="p-6 text-center space-y-3">
+        <div className="w-12 h-12 mx-auto flex items-center justify-center rounded-full bg-indigo-100 dark:bg-indigo-900/30">
+          <BarChart3 className="h-6 w-6 text-indigo-500" />
+        </div>
+        <h3 className="font-semibold text-foreground">Track Progress</h3>
+        <p className="text-sm text-muted-foreground">View stats, accuracy & achievements in your dashboard.</p>
+      </CardContent>
+    </Card>
+  </div>
+</div>
+
     </div>
   )
 }
