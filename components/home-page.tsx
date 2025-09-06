@@ -18,8 +18,11 @@ const HomePage = ({ onStartQuiz, onViewStats, onOpenSettings }: HomePageProps) =
   const [stats, setStats] = useState(getQuizStats())
   const [accuracy, setAccuracy] = useState(0)
   const [totalQuestions, setTotalQuestions] = useState(0)
+  const [isClient, setIsClient] = useState(false)
 
   useEffect(() => {
+    setIsClient(true)
+
     if (typeof window !== "undefined") {
       const newStats = getQuizStats()
       const history = getQuizHistory()
@@ -98,7 +101,7 @@ const HomePage = ({ onStartQuiz, onViewStats, onOpenSettings }: HomePageProps) =
       </div>
 
       {/* Quick Stats */}
-      {stats.gamesPlayed > 0 && (
+      {isClient && stats.gamesPlayed > 0 && (
         <div className="px-6 mb-8">
           <h2 className="text-xl font-semibold mb-4 text-foreground">Your Progress</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 animate-stagger">
@@ -138,8 +141,12 @@ const HomePage = ({ onStartQuiz, onViewStats, onOpenSettings }: HomePageProps) =
       <div className="px-6 mb-8">
         <h2 className="text-xl font-semibold mb-4 text-foreground">Popular Categories</h2>
         <div className="grid gap-4 animate-stagger">
-          {categories.map((category, index) => (
-            <Card key={category.id} className="transition-smooth hover:shadow-md cursor-pointer" onClick={onStartQuiz}>
+          {categories.map((category) => (
+            <Card
+              key={category.id}
+              className="transition-smooth hover:shadow-md cursor-pointer"
+              onClick={onStartQuiz}
+            >
               <CardContent className="p-4">
                 <div className="flex items-center gap-4">
                   <div className="text-2xl">{category.icon}</div>
