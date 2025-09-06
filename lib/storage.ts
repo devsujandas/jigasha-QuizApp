@@ -215,7 +215,11 @@ class QuizStorage {
 
     stats.totalScore += result.score
     stats.gamesPlayed += 1
-    stats.averageScore = Math.round((stats.totalScore / (stats.gamesPlayed * 10)) * 100)
+
+    // ✅ FIXED: averageScore now calculated from all history percentages
+    const totalPercentage = this.data.history.reduce((sum, r) => sum + r.percentage, 0)
+    stats.averageScore = Math.round(totalPercentage / stats.gamesPlayed)
+
     stats.bestScore = Math.max(stats.bestScore, result.percentage)
     stats.totalTimeSpent += result.timeSpent
 

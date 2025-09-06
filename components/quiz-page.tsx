@@ -147,8 +147,10 @@ export function QuizPage({ category, difficulty, onComplete, onBack }: QuizPageP
     const currentQuestion = questions[currentQuestionIndex]
     const isCorrect = answer.trim().toLowerCase() === currentQuestion.correctAnswer.trim().toLowerCase()
 
+    let newScore = score
     if (isCorrect) {
-      setScore(score + 1)
+      newScore = score + 1
+      setScore(newScore)
       playSound("correct")
     } else {
       playSound("wrong")
@@ -168,8 +170,8 @@ export function QuizPage({ category, difficulty, onComplete, onBack }: QuizPageP
         setShowResult(false)
         setTimeLeft(getTimerDuration())
       } else {
-        // Quiz completed
-        saveQuizResults()
+        // ✅ Pass latest score here
+        saveQuizResults(newScore)
         onComplete()
       }
     }, 2500)
@@ -225,14 +227,14 @@ export function QuizPage({ category, difficulty, onComplete, onBack }: QuizPageP
     }
   }
 
-  const saveQuizResults = () => {
+  const saveQuizResults = (finalScore: number) => {
     // Save to localStorage
     const timeSpent = Math.round((Date.now() - quizStartTime) / 1000)
 
     addQuizResult({
       category,
       difficulty,
-      score,
+      score: finalScore, // ✅ latest score use hocche
       totalQuestions: questions.length,
       timeSpent,
     })

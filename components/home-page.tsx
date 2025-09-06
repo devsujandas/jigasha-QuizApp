@@ -4,7 +4,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Play, Trophy, BarChart3, Settings, Clock, Target } from "lucide-react"
-import { getQuizStats } from "@/lib/storage"
+import { getQuizStats, getQuizHistory } from "@/lib/storage"
 import { useEffect, useState } from "react"
 import Image from "next/image"
 
@@ -15,17 +15,23 @@ interface HomePageProps {
 }
 
 const HomePage = ({ onStartQuiz, onViewStats, onOpenSettings }: HomePageProps) => {
-  const [stats, setStats] = useState({
-    gamesPlayed: 0,
-    bestScore: 0,
-    averageScore: 0,
-    totalQuestions: 0,
-    correctAnswers: 0,
-  })
+  const [stats, setStats] = useState(getQuizStats())
+  const [accuracy, setAccuracy] = useState(0)
+  const [totalQuestions, setTotalQuestions] = useState(0)
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      setStats(getQuizStats())
+      const newStats = getQuizStats()
+      const history = getQuizHistory()
+
+      // Calculate accuracy from history
+      const totalQ = history.reduce((sum, game) => sum + game.totalQuestions, 0)
+      const correct = history.reduce((sum, game) => sum + game.score, 0)
+      const acc = totalQ > 0 ? Math.round((correct / totalQ) * 100) : 0
+
+      setStats(newStats)
+      setAccuracy(acc)
+      setTotalQuestions(totalQ)
     }
   }, [])
 
@@ -52,47 +58,44 @@ const HomePage = ({ onStartQuiz, onViewStats, onOpenSettings }: HomePageProps) =
 
   return (
     <div className="min-h-screen bg-background pb-20">
-{/* Hero Section */}
-<div className="relative px-6 pt-20 pb-16">
-  <div className="text-center space-y-8 animate-fade-in">
+      {/* Hero Section */}
+      <div className="relative px-6 pt-20 pb-16">
+        <div className="text-center space-y-8 animate-fade-in">
+          {/* Logo + Brand */}
+          <div className="flex items-center justify-center ">
+            <Image
+              src="/images/brain-logo.png"
+              alt="JIGASHA Logo"
+              width={48}
+              height={48}
+              className="w-12 h-12 drop-shadow-lg"
+            />
+            <span className="text-3xl sm:text-4xl font-extrabold tracking-wide bg-gradient-to-r from-cyan-400 via-indigo-500 to-purple-600 bg-clip-text text-transparent">
+              JIGASHA
+            </span>
+          </div>
 
-    {/* Logo + Brand */}
-    <div className="flex items-center justify-center ">
-  <Image
-    src="/images/brain-logo.png"
-    alt="JIGASHA Logo"
-    width={48}
-    height={48}
-    className="w-12 h-12 drop-shadow-lg"
-  />
-  <span className="text-3xl sm:text-4xl font-extrabold tracking-wide bg-gradient-to-r from-cyan-400 via-indigo-500 to-purple-600 bg-clip-text text-transparent">
-    JIGASHA
-  </span>
-</div>
+          {/* Heading */}
+          <h1 className="text-3xl sm:text-5xl md:text-6xl font-extrabold text-foreground leading-tight">
+            Test Your Knowledge
+          </h1>
 
+          {/* Subtitle */}
+          <p className="text-base sm:text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+            Challenge yourself with engaging questions and keep track of your progress along the way.
+          </p>
 
-    {/* Heading */}
-    <h1 className="text-3xl sm:text-5xl md:text-6xl font-extrabold text-foreground leading-tight">
-      Test Your Knowledge
-    </h1>
-
-    {/* Subtitle */}
-    <p className="text-base sm:text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
-      Challenge yourself with engaging questions and keep track of your progress along the way.
-    </p>
-
-    {/* CTA Button */}
-    <Button
-      onClick={onStartQuiz}
-      size="lg"
-      className="mt-8 px-10 py-4 text-lg font-semibold rounded-xl shadow-md hover:shadow-xl transition-transform duration-300 hover:scale-110"
-    >
-      <Play className="h-6 w-6 mr-2" />
-      Start Quiz
-    </Button>
-  </div>
-</div>
-
+          {/* CTA Button */}
+          <Button
+            onClick={onStartQuiz}
+            size="lg"
+            className="mt-8 px-10 py-4 text-lg font-semibold rounded-xl shadow-md hover:shadow-xl transition-transform duration-300 hover:scale-110"
+          >
+            <Play className="h-6 w-6 mr-2" />
+            Start Quiz
+          </Button>
+        </div>
+      </div>
 
       {/* Quick Stats */}
       {stats.gamesPlayed > 0 && (
@@ -116,16 +119,14 @@ const HomePage = ({ onStartQuiz, onViewStats, onOpenSettings }: HomePageProps) =
             <Card className="transition-smooth hover:shadow-md">
               <CardContent className="p-4 text-center">
                 <Target className="h-6 w-6 text-primary mx-auto mb-2" />
-                <div className="text-2xl font-bold text-foreground">
-                  {Math.round((stats.correctAnswers / stats.totalQuestions) * 100) || 0}%
-                </div>
+                <div className="text-2xl font-bold text-foreground">{accuracy}%</div>
                 <div className="text-sm text-muted-foreground">Accuracy</div>
               </CardContent>
             </Card>
             <Card className="transition-smooth hover:shadow-md">
               <CardContent className="p-4 text-center">
                 <Clock className="h-6 w-6 text-primary mx-auto mb-2" />
-                <div className="text-2xl font-bold text-foreground">{stats.totalQuestions}</div>
+                <div className="text-2xl font-bold text-foreground">{totalQuestions}</div>
                 <div className="text-sm text-muted-foreground">Questions</div>
               </CardContent>
             </Card>

@@ -55,6 +55,17 @@ export function ResultsPage({ onBack }: ResultsPageProps) {
     setLastResult(null)
   }
 
+  // ✅ Format date safely
+  const date = lastResult.timestamp ? new Date(lastResult.timestamp) : null
+  const formattedDate =
+    date && !isNaN(date.getTime())
+      ? date.toLocaleDateString("en-US", { day: "2-digit", month: "2-digit", year: "numeric" })
+      : "Unknown Date"
+  const formattedTime =
+    date && !isNaN(date.getTime())
+      ? date.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" })
+      : "Unknown Time"
+
   return (
     <div className="min-h-screen bg-background pb-20">
       {/* Header */}
@@ -84,6 +95,10 @@ export function ResultsPage({ onBack }: ResultsPageProps) {
               {lastResult.score}/{lastResult.totalQuestions}
             </div>
             <div className="text-lg text-muted-foreground">{percentage}% Correct</div>
+            {/* ✅ Date + Time */}
+            <div className="text-sm text-muted-foreground mt-2">
+              {lastResult.difficulty} • {formattedDate} at {formattedTime}
+            </div>
           </CardHeader>
           <CardContent>
             <div className="flex justify-center gap-2 mb-4">
