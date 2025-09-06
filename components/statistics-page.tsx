@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { ArrowLeft, BarChart3, Trophy, TrendingUp, Target, User, Clock } from "lucide-react"
+import { ArrowLeft, BarChart3, Trophy, TrendingUp, Target, User, Clock, Flame, Timer } from "lucide-react"
 import { getQuizStats, getQuizHistory } from "@/lib/storage"
 
 interface StatisticsPageProps {
@@ -26,7 +26,6 @@ export function StatisticsPage({ onBack }: StatisticsPageProps) {
     if (history.length === 0) return { accuracy: 0, totalQuestions: 0, correctAnswers: 0 }
 
     const totalQuestions = history.reduce((sum, game) => sum + game.totalQuestions, 0)
-    // ✅ use rawScore if available, fallback to score
     const correctAnswers = history.reduce(
       (sum, game) => sum + (game.rawScore ?? game.score),
       0
@@ -37,6 +36,10 @@ export function StatisticsPage({ onBack }: StatisticsPageProps) {
   }
 
   const accuracyStats = getAccuracyStats()
+
+  // ✅ Calculate penalty details
+  const totalRawScore = history.reduce((sum, g) => sum + (g.rawScore ?? g.score), 0)
+  const penalty = totalRawScore - stats.totalScore
 
   if (!isClient) {
     return (
@@ -131,7 +134,7 @@ export function StatisticsPage({ onBack }: StatisticsPageProps) {
         </CardContent>
       </Card>
 
-      {/* ✅ Total Correct Answers card */}
+      {/* ✅ Updated Total Correct Answers card */}
       <Card className="transition-smooth hover:shadow-md">
         <CardContent className="p-6">
           <div className="flex items-center justify-between mb-2">
@@ -139,7 +142,9 @@ export function StatisticsPage({ onBack }: StatisticsPageProps) {
             <Target className="h-5 w-5 text-primary" />
           </div>
           <div className="text-3xl font-bold text-foreground mb-1">{stats.totalScore}</div>
-          <div className="text-sm text-muted-foreground">1 point per correct answer (after penalty)</div>
+          <div className="text-sm text-muted-foreground">
+            Raw: {totalRawScore} • Penalty: {penalty > 0 ? `-${penalty}` : 0}
+          </div>
         </CardContent>
       </Card>
 
@@ -164,8 +169,35 @@ export function StatisticsPage({ onBack }: StatisticsPageProps) {
           <div className="text-sm text-muted-foreground">Questions answered</div>
         </CardContent>
       </Card>
+
+      <Card className="transition-smooth hover:shadow-md">
+        <CardContent className="p-6">
+          <div className="flex items-center justify-between mb-2">
+            <h3 className="font-medium text-muted-foreground">Total Time Spent</h3>
+            <Timer className="h-5 w-5 text-primary" />
+          </div>
+          <div className="text-3xl font-bold text-foreground mb-1">
+            {Math.round(stats.totalTimeSpent / 60)} min
+          </div>
+          <div className="text-sm text-muted-foreground">Across all quizzes</div>
+        </CardContent>
+      </Card>
+
+      <Card className="transition-smooth hover:shadow-md">
+        <CardContent className="p-6">
+          <div className="flex items-center justify-between mb-2">
+            <h3 className="font-medium text-muted-foreground">Best Streak</h3>
+            <Flame className="h-5 w-5 text-primary" />
+          </div>
+          <div className="text-3xl font-bold text-foreground mb-1">{stats.streakBest}</div>
+          <div className="text-sm text-muted-foreground">Consecutive wins</div>
+        </CardContent>
+      </Card>
     </div>
   )
+
+  // ... rest of renderHighScores, renderRecentGames, renderTabContent stay unchanged
+  // (no changes needed below)
 
   const renderHighScores = () => (
     <div className="space-y-3 animate-fade-in">
