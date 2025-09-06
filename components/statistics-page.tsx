@@ -65,9 +65,7 @@ export function StatisticsPage({ onBack }: StatisticsPageProps) {
   }
 
   const getRecentGames = () => {
-    return history
-      .sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0))
-      .slice(0, 10)
+    return history.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0)).slice(0, 10)
   }
 
   // ✅ Safe date formatter
@@ -102,7 +100,7 @@ export function StatisticsPage({ onBack }: StatisticsPageProps) {
             <Trophy className="h-5 w-5 text-primary" />
           </div>
           <div className="text-3xl font-bold text-foreground mb-1">{stats.bestScore}</div>
-          <div className="text-sm text-muted-foreground">Highest percentage earned</div>
+          <div className="text-sm text-muted-foreground">Highest percentage correct</div>
         </CardContent>
       </Card>
 
@@ -113,7 +111,7 @@ export function StatisticsPage({ onBack }: StatisticsPageProps) {
             <TrendingUp className="h-5 w-5 text-primary" />
           </div>
           <div className="text-3xl font-bold text-foreground mb-1">{stats.averageScore}</div>
-          <div className="text-sm text-muted-foreground">Points per quiz</div>
+          <div className="text-sm text-muted-foreground">Percentage per quiz</div>
         </CardContent>
       </Card>
 
@@ -127,6 +125,18 @@ export function StatisticsPage({ onBack }: StatisticsPageProps) {
           <div className="text-sm text-muted-foreground">
             {accuracyStats.correctAnswers} / {accuracyStats.totalQuestions} correct
           </div>
+        </CardContent>
+      </Card>
+
+      {/* ✅ Total Correct Answers card */}
+      <Card className="transition-smooth hover:shadow-md">
+        <CardContent className="p-6">
+          <div className="flex items-center justify-between mb-2">
+            <h3 className="font-medium text-muted-foreground">Total Correct Answers</h3>
+            <Target className="h-5 w-5 text-primary" />
+          </div>
+          <div className="text-3xl font-bold text-foreground mb-1">{stats.totalScore}</div>
+          <div className="text-sm text-muted-foreground">1 point per correct answer</div>
         </CardContent>
       </Card>
 
