@@ -176,14 +176,15 @@ const HomePage = ({ onStartQuiz, onViewStats, onOpenSettings }: HomePageProps) =
             <BarChart3 className="h-5 w-5" />
             <span className="text-sm">View Stats</span>
           </Button>
-            <Button
+          
+          <Button 
             variant="outline"
-            onClick={() => window.location.href = "/badges"}
+            onClick={onOpenSettings}
             className="h-16 flex-col gap-2 transition-smooth hover:bg-accent bg-transparent"
-            >
-            <Trophy className="h-5 w-5" />
-            <span className="text-sm">Badges</span>
-            </Button>
+          > 
+            <Settings className="h-5 w-5" /> 
+            <span className="text-sm">Settings</span> 
+          </Button>
         </div>
       </div>
 
