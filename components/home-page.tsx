@@ -176,30 +176,32 @@ const HomePage = ({ onStartQuiz, onViewStats, onOpenSettings }: HomePageProps) =
             <BarChart3 className="h-5 w-5" />
             <span className="text-sm">View Stats</span>
           </Button>
-          <Button
+            <Button
             variant="outline"
-            onClick={onOpenSettings}
+            onClick={() => window.location.href = "/badges"}
             className="h-16 flex-col gap-2 transition-smooth hover:bg-accent bg-transparent"
-          >
-            <Settings className="h-5 w-5" />
-            <span className="text-sm">Settings</span>
-          </Button>
+            >
+            <Trophy className="h-5 w-5" />
+            <span className="text-sm">Badges</span>
+            </Button>
         </div>
       </div>
 
-      {/* How to Play Section */}
-<div className="px-6 mb-12">
-  <h2 className="text-2xl font-bold mb-6 text-center bg-gradient-to-r from-purple-500 via-indigo-500 to-cyan-400 bg-clip-text text-transparent">
+{/* How to Play Section */}
+<div className="px-6 mt-12 mb-12">
+  <h2 className="text-xl font-semibold mb-8 text-left text-foreground">
     How to Play
   </h2>
-  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 animate-stagger">
+  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 animate-stagger">
     <Card className="transition-all duration-300 hover:shadow-lg hover:scale-105">
       <CardContent className="p-6 text-center space-y-3">
         <div className="w-12 h-12 mx-auto flex items-center justify-center rounded-full bg-green-100 dark:bg-green-900/30">
           <Target className="h-6 w-6 text-green-600" />
         </div>
         <h3 className="font-semibold text-foreground">Earn Points</h3>
-        <p className="text-sm text-muted-foreground">Each correct answer gives <span className="font-bold text-green-600">+1 point</span>.</p>
+        <p className="text-sm text-muted-foreground">
+          Each correct answer gives <span className="font-bold text-green-600">+1 point</span>.
+        </p>
       </CardContent>
     </Card>
 
@@ -209,7 +211,9 @@ const HomePage = ({ onStartQuiz, onViewStats, onOpenSettings }: HomePageProps) =
           <Trophy className="h-6 w-6 text-red-500" />
         </div>
         <h3 className="font-semibold text-foreground">Beware of Penalty</h3>
-        <p className="text-sm text-muted-foreground">Each wrong answer deducts <span className="font-bold text-red-500">−0.25 points</span>.</p>
+        <p className="text-sm text-muted-foreground">
+          Each wrong answer deducts <span className="font-bold text-red-500">−0.25 points</span>.
+        </p>
       </CardContent>
     </Card>
 
@@ -219,7 +223,9 @@ const HomePage = ({ onStartQuiz, onViewStats, onOpenSettings }: HomePageProps) =
           <Clock className="h-6 w-6 text-yellow-500" />
         </div>
         <h3 className="font-semibold text-foreground">Time Matters</h3>
-        <p className="text-sm text-muted-foreground">Finish all questions within the timer to score better.</p>
+        <p className="text-sm text-muted-foreground">
+          Finish all questions within the timer to score better.
+        </p>
       </CardContent>
     </Card>
 
@@ -229,11 +235,14 @@ const HomePage = ({ onStartQuiz, onViewStats, onOpenSettings }: HomePageProps) =
           <BarChart3 className="h-6 w-6 text-indigo-500" />
         </div>
         <h3 className="font-semibold text-foreground">Track Progress</h3>
-        <p className="text-sm text-muted-foreground">View stats, accuracy & achievements in your dashboard.</p>
+        <p className="text-sm text-muted-foreground">
+          View stats, accuracy & achievements in your dashboard.
+        </p>
       </CardContent>
     </Card>
   </div>
 </div>
+
 
     </div>
   )
