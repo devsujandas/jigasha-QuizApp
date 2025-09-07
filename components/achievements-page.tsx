@@ -4,7 +4,12 @@ import { useState, useEffect } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { ArrowLeft, Share2, Lock, CheckCircle, Trophy } from "lucide-react"
+import { 
+  ArrowLeft, Share2, Lock, CheckCircle, 
+  Target, Zap, Timer, Flame, Compass, 
+  BookOpen, Award, Moon, Crown, Archive 
+} from "lucide-react"
+import { IconRun } from "@tabler/icons-react"   // ✅ Marathon icon import
 import { getStorage } from "@/lib/storage"
 
 interface AchievementsPageProps {
@@ -23,76 +28,91 @@ export function AchievementsPage({ onBack }: AchievementsPageProps) {
     setStats(storage.getStats())
   }, [])
 
+  // ✅ All achievements with unique premium icons
   const allAchievements = [
     {
       id: "first-strike",
       name: "First Strike",
       description: "Complete your very first quiz",
-      icon: "🎯",
+      icon: <Target className="w-8 h-8 text-blue-600 dark:text-blue-400" />,
       requirement: "Complete 1 quiz",
     },
     {
       id: "brain-spark",
       name: "Brain Spark",
       description: "Score 100% in any quiz",
-      icon: "🧠",
+      icon: <Zap className="w-8 h-8 text-yellow-500 dark:text-yellow-400" />,
       requirement: "Score 100% on any quiz",
     },
     {
       id: "speed-demon",
       name: "Speed Demon",
       description: "Finish a quiz in under 60 seconds",
-      icon: "⚡",
+      icon: <Timer className="w-8 h-8 text-purple-500 dark:text-purple-400" />,
       requirement: "Complete quiz in under 60 seconds",
     },
     {
       id: "hot-streak",
       name: "Hot Streak",
       description: "Win 3 quizzes in a row",
-      icon: "🔥",
+      icon: <Flame className="w-8 h-8 text-orange-500 dark:text-orange-400" />,
       requirement: "Win 3 quizzes consecutively",
     },
     {
       id: "explorer",
       name: "Explorer",
       description: "Play quizzes from 5 different categories",
-      icon: "🗺️",
+      icon: <Compass className="w-8 h-8 text-cyan-600 dark:text-cyan-400" />,
       requirement: "Play 5 different categories",
     },
     {
       id: "quiz-veteran",
       name: "Quiz Veteran",
       description: "Attempt 25 quizzes in total",
-      icon: "🎖️",
+      icon: <BookOpen className="w-8 h-8 text-emerald-600 dark:text-emerald-400" />,
       requirement: "Complete 25 quizzes",
     },
     {
       id: "perfectionist",
       name: "Perfectionist",
       description: "Achieve a perfect score 3 times",
-      icon: "💯",
+      icon: <Award className="w-8 h-8 text-red-500 dark:text-red-400" />,
       requirement: "Get 100% score 3 times",
     },
     {
       id: "night-owl",
       name: "Night Owl",
       description: "Play a quiz between midnight and 3 AM",
-      icon: "🦉",
+      icon: <Moon className="w-8 h-8 text-indigo-500 dark:text-indigo-400" />,
       requirement: "Play between 12 AM - 3 AM",
     },
     {
       id: "grandmaster",
       name: "Grandmaster",
       description: "Reach 500 total points",
-      icon: "👑",
+      icon: <Crown className="w-8 h-8 text-pink-600 dark:text-pink-400" />,
       requirement: "Earn 500 total points",
     },
     {
       id: "marathoner",
       name: "Marathoner",
       description: "Play quizzes 7 days in a row",
-      icon: "🏃",
+      icon: <IconRun className="w-8 h-8 text-teal-600 dark:text-teal-400" />,   // ✅ Updated running symbol
       requirement: "Play 7 consecutive days",
+    },
+    {
+      id: "legend",
+      name: "Legend",
+      description: "Reach 1000 total points",
+      icon: <Crown className="w-8 h-8 text-amber-600 dark:text-amber-400" />,
+      requirement: "Earn 1000 total points",
+    },
+    {
+      id: "collector",
+      name: "Collector",
+      description: "Unlock 10 different achievements",
+      icon: <Archive className="w-8 h-8 text-gray-600 dark:text-gray-300" />,
+      requirement: "Unlock 10 achievements",
     },
   ]
 
@@ -108,7 +128,6 @@ export function AchievementsPage({ onBack }: AchievementsPageProps) {
         console.log("Error sharing:", error)
       }
     } else {
-      // Fallback for browsers that don't support Web Share API
       const text = `I just earned the "${achievement.name}" badge in JIGASHA! ${achievement.description} - ${window.location.origin}`
       navigator.clipboard.writeText(text)
       alert("Achievement copied to clipboard!")
@@ -117,13 +136,11 @@ export function AchievementsPage({ onBack }: AchievementsPageProps) {
 
   const getProgress = (achievementId: string) => {
     if (!stats) return 0
-
     switch (achievementId) {
       case "first-strike":
         return Math.min(stats.gamesPlayed, 1)
       case "brain-spark":
-        const perfectScores = stats.gamesPlayed > 0 ? (achievements.includes("brain-spark") ? 1 : 0) : 0
-        return perfectScores
+        return achievements.includes("brain-spark") ? 1 : 0
       case "speed-demon":
         return achievements.includes("speed-demon") ? 1 : 0
       case "hot-streak":
@@ -133,7 +150,6 @@ export function AchievementsPage({ onBack }: AchievementsPageProps) {
       case "quiz-veteran":
         return Math.min(stats.gamesPlayed, 25)
       case "perfectionist":
-        // Count perfect scores from history if available, otherwise use achievement status
         return achievements.includes("perfectionist") ? 3 : 0
       case "night-owl":
         return achievements.includes("night-owl") ? 1 : 0
@@ -141,6 +157,10 @@ export function AchievementsPage({ onBack }: AchievementsPageProps) {
         return Math.min(stats.totalScore, 500)
       case "marathoner":
         return achievements.includes("marathoner") ? 7 : 0
+      case "legend":
+        return Math.min(stats.totalScore, 1000)
+      case "collector":
+        return Math.min(achievements.length, 10)
       default:
         return achievements.includes(achievementId) ? 1 : 0
     }
@@ -148,20 +168,15 @@ export function AchievementsPage({ onBack }: AchievementsPageProps) {
 
   const getMaxProgress = (achievementId: string) => {
     switch (achievementId) {
-      case "hot-streak":
-        return 3
-      case "explorer":
-        return 5
-      case "quiz-veteran":
-        return 25
-      case "perfectionist":
-        return 3
-      case "grandmaster":
-        return 500
-      case "marathoner":
-        return 7
-      default:
-        return 1
+      case "hot-streak": return 3
+      case "explorer": return 5
+      case "quiz-veteran": return 25
+      case "perfectionist": return 3
+      case "grandmaster": return 500
+      case "marathoner": return 7
+      case "legend": return 1000
+      case "collector": return 10
+      default: return 1
     }
   }
 
@@ -179,13 +194,13 @@ export function AchievementsPage({ onBack }: AchievementsPageProps) {
   const totalCount = allAchievements.length
 
   return (
-    <div className="min-h-screen bg-background pb-20">
+    <div className="min-h-screen bg-background pb-20 transition-colors">
       {/* Header */}
       <div className="bg-gradient-to-br from-primary/5 to-secondary/5 border-b border-border p-6 animate-slide-up">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-3">
             <div className="p-2 bg-primary/10 rounded-xl">
-              <Trophy className="h-6 w-6 text-primary" />
+              <Award className="h-6 w-6 text-primary" />
             </div>
             <div>
               <h1 className="text-2xl font-bold text-foreground animate-fade-in">Achievements</h1>
@@ -198,14 +213,6 @@ export function AchievementsPage({ onBack }: AchievementsPageProps) {
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back
           </Button>
-        </div>
-
-        <div className="bg-card/50 backdrop-blur-sm rounded-xl p-4 mb-4 border border-border/50">
-          <h2 className="text-lg font-semibold text-foreground mb-2">Welcome to Achievements! 🎉</h2>
-          <p className="text-sm text-muted-foreground leading-relaxed">
-            Track your quiz journey, unlock milestones, and collect unique badges as you grow from beginner to master.
-            Each achievement marks your progress — can you earn them all?
-          </p>
         </div>
 
         {/* Progress Bar */}
@@ -243,7 +250,7 @@ export function AchievementsPage({ onBack }: AchievementsPageProps) {
                 style={{ animationDelay: `${index * 100}ms` }}
               >
                 <CardHeader className="text-center pb-3">
-                  <div className="text-4xl mb-2 relative transform transition-transform hover:scale-110">
+                  <div className="text-4xl mb-2 relative flex justify-center">
                     {achievement.icon}
                     {isUnlocked ? (
                       <CheckCircle className="absolute -top-1 -right-1 h-5 w-5 text-green-600 bg-white rounded-full shadow-sm" />
@@ -264,7 +271,7 @@ export function AchievementsPage({ onBack }: AchievementsPageProps) {
                         isUnlocked ? "bg-green-600 hover:bg-green-700" : ""
                       }`}
                     >
-                      {isUnlocked ? "✓ Unlocked" : "🔒 Locked"}
+                      {isUnlocked ? "✓ Unlocked" : "Locked"}
                     </Badge>
 
                     {!isUnlocked && (
@@ -292,7 +299,7 @@ export function AchievementsPage({ onBack }: AchievementsPageProps) {
                         variant="outline"
                         size="sm"
                         onClick={() => shareAchievement(achievement)}
-                        className="w-full hover:bg-green-50 hover:border-green-300 transition-colors"
+                        className="w-full hover:bg-green-50 hover:border-green-300 transition-colors dark:hover:bg-green-950"
                       >
                         <Share2 className="h-3 w-3 mr-2" />
                         Share Achievement
