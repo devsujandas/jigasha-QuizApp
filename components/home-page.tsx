@@ -92,14 +92,15 @@ const HomePage = ({ onStartQuiz, onViewStats, onOpenSettings }: HomePageProps) =
           </p>
 
           {/* CTA Button */}
-          <Button
-            onClick={onStartQuiz}
-            size="lg"
-            className="mt-8 px-10 py-4 text-lg font-semibold rounded-xl shadow-md hover:shadow-xl transition-transform duration-300 hover:scale-110"
-          >
-            <Play className="h-6 w-6 mr-2" />
-            Start Quiz
-          </Button>
+<Button
+  onClick={onStartQuiz} // ✅ eta use korte hobe
+  size="lg"
+  className="mt-8 px-10 py-4 text-lg font-semibold rounded-xl shadow-md hover:shadow-xl transition-transform duration-300 hover:scale-110"
+>
+  <Play className="h-6 w-6 mr-2" />
+  Start Quiz
+</Button>
+
         </div>
       </div>   
 

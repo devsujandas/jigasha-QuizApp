@@ -12,7 +12,7 @@ interface BottomNavigationProps {
 export function BottomNavigation({ currentPage, onPageChange }: BottomNavigationProps) {
   const navItems = [
     { id: "home", label: "Home", icon: Home },
-    { id: "quiz", label: "Quiz", icon: Brain },
+    { id: "category-select", label: "Quiz", icon: Brain },  // 👈 Quiz button = category-select page
     { id: "achievements", label: "Badges", icon: Trophy },
     { id: "statistics", label: "Stats", icon: BarChart3 },
     { id: "settings", label: "Settings", icon: Settings },
@@ -34,11 +34,19 @@ export function BottomNavigation({ currentPage, onPageChange }: BottomNavigation
                 "flex flex-col items-center gap-1 h-auto py-2 px-3 min-w-0 transition-all duration-200",
                 isActive && "bg-primary text-primary-foreground shadow-sm",
               )}
-              onClick={() => onPageChange(item.id)}
+              onClick={() => onPageChange(item.id)}  // SPA navigation
             >
-              <Icon className={cn("h-5 w-5", isActive ? "text-primary-foreground" : "text-muted-foreground")} />
+              <Icon
+                className={cn(
+                  "h-5 w-5",
+                  isActive ? "text-primary-foreground" : "text-muted-foreground"
+                )}
+              />
               <span
-                className={cn("text-xs font-medium", isActive ? "text-primary-foreground" : "text-muted-foreground")}
+                className={cn(
+                  "text-xs font-medium",
+                  isActive ? "text-primary-foreground" : "text-muted-foreground"
+                )}
               >
                 {item.label}
               </span>
